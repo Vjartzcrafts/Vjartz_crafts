@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Vjartz & Crafts - Online Store</title>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -126,10 +127,8 @@
         <input type="text" name="name" id="custName" placeholder="Your Name" required><br/><br/>
         <input type="email" name="email" id="customerEmail" placeholder="Email Address" required><br/><br/>
         <textarea name="address" placeholder="Delivery Address" required></textarea><br/><br/>
-        <p><strong>Select UPI Method:</strong></p>
-        <label><input type="radio" name="upi" value="PhonePe" checked> PhonePe - 9550588369@ybl</label><br/>
         <input type="hidden" name="cart_summary" id="cartSummary">
-        <button type="submit" class="blue-btn">Submit Order & Pay</button>
+        <button type="submit" class="blue-btn">Pay with Razorpay</button>
       </form>
     </div>
   </div>
@@ -172,24 +171,34 @@
 
     document.getElementById('orderForm').addEventListener('submit', function(e) {
       e.preventDefault();
-
       const name = document.getElementById('custName').value;
       const email = document.getElementById('customerEmail').value;
       const orderId = 'VJ' + Math.floor(100000 + Math.random() * 900000);
 
-      const message = `Thank you ${name} for your order!\nOrder ID: ${orderId}\n\n` + document.getElementById('cartSummary').value;
+      const options = {
+        key: 'rzp_test_YourKeyHere', // Replace with your Razorpay key
+        amount: total * 100, // in paise
+        currency: 'INR',
+        name: 'Vjartz & Crafts',
+        description: `Order ID: ${orderId}`,
+        prefill: {
+          name: name,
+          email: email
+        },
+        notes: {
+          order_id: orderId,
+          cart: document.getElementById('cartSummary').value
+        },
+        theme: {
+          color: '#007BFF'
+        },
+        handler: function (response) {
+          window.location.href = 'thankyou.html?orderId=' + orderId;
+        }
+      };
 
-      // Simulate form submit using mailto or backend handler
-      alert(message);
-
-      // Redirect to PhonePe UPI
-      const upiLink = `upi://pay?pa=9550588369@ybl&pn=Vjartz%20Crafts&am=${total}&cu=INR&tn=Order%20${orderId}`;
-      window.location.href = upiLink;
-
-      // Optionally redirect to confirmation page after few seconds
-      setTimeout(() => {
-        window.location.href = 'thankyou.html';
-      }, 5000);
+      const rzp = new Razorpay(options);
+      rzp.open();
     });
   </script>
 </body>

@@ -75,6 +75,7 @@
       padding: 20px;
       border-radius: 5px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: none;
     }
   </style>
 </head>
@@ -115,7 +116,7 @@
       </table>
       <div class="checkout">
         <h3>Total: ₹<span id="totalPrice">0</span></h3>
-        <button class="blue-btn" onclick="document.getElementById('paymentForm').scrollIntoView()">Proceed to Pay</button>
+        <button class="blue-btn" onclick="showPaymentForm()">Proceed to Pay</button>
       </div>
     </div>
 
@@ -162,6 +163,11 @@
 
       totalPrice.innerText = total;
       cartSummary.value = summary + `\nTotal = ₹${total}`;
+    }
+
+    function showPaymentForm() {
+      document.getElementById('paymentForm').style.display = 'block';
+      document.getElementById('paymentForm').scrollIntoView({ behavior: 'smooth' });
     }
   </script>
 </body>

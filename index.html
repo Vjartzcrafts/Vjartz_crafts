@@ -1,1 +1,30 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vjartz & Crafts</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Vjartz & Crafts</h1>
+    <p>Follow us on Instagram: <a href="https://instagram.com/vjartz_crafts" target="_blank">@vjartz_crafts</a></p>
+
+    <div class="products" id="products"></div>
+
+    <div class="order-form">
+      <h2>Place Your Order</h2>
+      <input type="email" id="email" placeholder="Your Email" required />
+      <textarea id="message" placeholder="Custom message or notes..."></textarea>
+      <label>Upload Reference Image:</label>
+      <input type="file" id="fileInput" accept="image/*" />
+      <button onclick="submitOrder()">Buy Now via UPI</button>
+      <p>You'll receive UPI details to complete the payment via PhonePe, GPay, Paytm, or CRED.</p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

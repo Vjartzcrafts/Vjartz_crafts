@@ -1,4 +1,4 @@
-<!-- Final version with UPI QR Code + Link Payment -->
+<!-- Final version with UPI QR Code Image + UPI App Link -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -135,21 +135,16 @@
         <button type="submit" class="blue-btn">Continue to UPI Payment</button>
       </form>
       <br/>
-      <div id="upiPaymentBox" style="margin-top: 20px;">
-  <h3>Scan & Pay to <strong>9550588369@ybl</strong></h3>
-  <p>Use any UPI App like <strong>PhonePe, Google Pay, or CRED</strong></p>
-  
-  <!-- Show your uploaded QR image -->
-  <img src="pay.image.png" alt="PhonePe UPI QR" style="width:300px;height:300px;border:1px solid #ccc;"><br><br>
-  
-  <!-- Direct UPI payment link -->
-  <a class="blue-btn" 
-     href="upi://pay?pa=9550588369@ybl&pn=Vjartz%20Crafts&cu=INR" 
-     target="_blank">
-    Pay Now via UPI App
-  </a>
-</div>
-
+      <div id="upiPaymentBox" style="margin-top: 20px; display:none;">
+        <h3>Scan & Pay to <strong>9550588369@ybl</strong></h3>
+        <p>Use any UPI App like <strong>PhonePe, Google Pay, or CRED</strong></p>
+        <img src="pay.image.png" alt="PhonePe UPI QR" style="width:300px;height:300px;border:1px solid #ccc;"><br><br>
+        <a class="blue-btn" 
+           href="upi://pay?pa=9550588369@ybl&pn=Vjartz%20Crafts&cu=INR" 
+           target="_blank">
+          Pay Now via UPI App
+        </a>
+      </div>
     </div>
   </div>
 
@@ -218,30 +213,12 @@
       const address = document.getElementById('custAddress').value;
       const orderId = 'VJ' + Math.floor(100000 + Math.random() * 900000);
 
-      const upiString = `upi://pay?pa=9550588369@ybl&pn=Vjartz%20Crafts&am=${total}&cu=INR&tn=Order%20${orderId}`;
-      const qrApi = `https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=${encodeURIComponent(upiString)}`;
-
-      document.getElementById('upiQR').src = qrApi;
-      document.getElementById('upiPayLink').href = upiString;
       document.getElementById('upiPaymentBox').style.display = 'block';
-
-      const message = `Hello ${name},\n\nThank you for your order (ID: ${orderId}).\n\nOrder Summary:\n${document.getElementById('cartSummary').value}\n\nDelivery Address:\n${address}\n\nPlease complete payment via UPI to 9550588369@ybl`;
-
-      emailjs.send("your_service_id", "your_template_id", {
-        to_email: email,
-        customer_name: name,
-        order_id: orderId,
-        message: message
-      }, "your_user_id");
 
       setTimeout(() => {
         window.location.href = `thankyou.html?name=${encodeURIComponent(name)}&orderId=${orderId}&total=${total}`;
-      }, 2000);
+      }, 5000);
     });
-  </script>
-  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
-  <script>
-    (function(){ emailjs.init("your_user_id"); })();
   </script>
 </body>
 </html>

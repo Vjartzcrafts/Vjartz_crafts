@@ -1,30 +1,151 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Vjartz & Crafts</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vjartz & Crafts - Shop</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f9ff;
+      color: #034078;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #a2d2ff;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin: 10px;
+      padding: 20px;
+      width: 250px;
+      text-align: center;
+    }
+    .card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .buy-btn {
+      background-color: #38b6ff;
+      color: white;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      margin-top: 10px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    form {
+      display: none;
+      background-color: #ffffff;
+      max-width: 500px;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .form-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .upi-section {
+      margin-top: 10px;
+      background: #f9f9f9;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    .upi-section strong {
+      color: #0077b6;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Vjartz & Crafts</h1>
-    <p>Follow us on Instagram: <a href="https://instagram.com/vjartz_crafts" target="_blank">@vjartz_crafts</a></p>
+  <header>
+    Vjartz & Crafts - Resin Art Store
+  </header>
 
-    <div class="products" id="products"></div>
-
-    <div class="order-form">
-      <h2>Place Your Order</h2>
-      <input type="email" id="email" placeholder="Your Email" required />
-      <textarea id="message" placeholder="Custom message or notes..."></textarea>
-      <label>Upload Reference Image:</label>
-      <input type="file" id="fileInput" accept="image/*" />
-      <button onclick="submitOrder()">Buy Now via UPI</button>
-      <p>You'll receive UPI details to complete the payment via PhonePe, GPay, Paytm, or CRED.</p>
+  <div class="products">
+    <div class="card">
+      <img src="https://via.placeholder.com/250x150.png?text=Keychain" alt="Keychain">
+      <h3>Resin Keychain</h3>
+      <p>Price: ₹150</p>
+      <button class="buy-btn" onclick="openForm('Resin Keychain', 150)">Buy Now</button>
     </div>
+    <div class="card">
+      <img src="https://via.placeholder.com/250x150.png?text=Nameplate" alt="Nameplate">
+      <h3>Custom Nameplate</h3>
+      <p>Price: ₹700</p>
+      <button class="buy-btn" onclick="openForm('Custom Nameplate', 700)">Buy Now</button>
+    </div>
+    <!-- Add more cards as needed -->
   </div>
 
-  <script src="script.js"></script>
+  <form id="orderForm" action="https://formspree.io/f/mwkgnzvl" method="POST" enctype="multipart/form-data">
+    <h2>Order Form</h2>
+    <input type="hidden" name="Product Name" id="productName">
+    <input type="hidden" name="Price" id="productPrice">
+
+    <label>Name</label>
+    <input type="text" name="Customer Name" required>
+
+    <label>Email</label>
+    <input type="email" name="Email" required>
+
+    <label>Phone</label>
+    <input type="text" name="Phone" required>
+
+    <label>Delivery Address</label>
+    <textarea name="Address" required></textarea>
+
+    <label>Upload Reference Image (optional)</label>
+    <input type="file" name="Reference Image">
+
+    <div class="upi-section">
+      <p><strong>UPI ID:</strong> vjartz@ybl</p>
+      <p>📸 After payment, share screenshot via email or WhatsApp</p>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="buy-btn">Submit Order</button>
+      <button type="button" onclick="closeForm()">Cancel</button>
+    </div>
+  </form>
+
+  <script>
+    function openForm(name, price) {
+      document.getElementById('orderForm').style.display = 'block';
+      document.getElementById('productName').value = name;
+      document.getElementById('productPrice').value = '₹' + price;
+    }
+    function closeForm() {
+      document.getElementById('orderForm').style.display = 'none';
+    }
+  </script>
 </body>
 </html>
+

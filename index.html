@@ -1,71 +1,179 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Vjartz & Crafts</title>
-  <link rel="stylesheet" href="style.css">
-  <script defer src="script.js"></script>
+  <title>Vjartz & Crafts - Online Store</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #007BFF;
+      color: white;
+      padding: 15px 20px;
+      text-align: center;
+    }
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px;
+    }
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .product {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 15px;
+      width: 30%;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .product h3 {
+      margin: 0;
+    }
+    .product input {
+      width: 50px;
+      margin-right: 10px;
+    }
+    .blue-btn {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .blue-btn:hover {
+      background-color: #0056b3;
+    }
+    .cart {
+      margin-top: 30px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+    .checkout {
+      margin-top: 20px;
+      text-align: right;
+    }
+    .payment-section {
+      margin-top: 30px;
+      background: white;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: none;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <div class="top-bar">
-      <a href="https://wa.me/918200425601" target="_blank">Chat with us on WhatsApp</a>
-      <input type="text" id="searchInput" placeholder="Search for products...">
-      <div class="user-icons">
-        <span id="wishlist-count">♥ 0</span>
-        <span id="cart-count">🛒 0</span>
-        <button id="loginBtn">Login</button>
+    <h1>Vjartz & Crafts - Your Handmade Store</h1>
+  </header>
+  <div class="container">
+    <h2>Products</h2>
+    <div class="products">
+      <div class="product">
+        <h3>Keychain</h3>
+        <p>Price: ₹150</p>
+        <input type="number" id="qty1" min="1" value="1">
+        <button class="blue-btn" onclick="addToCart('Keychain', 150, 'qty1')">Add to Cart</button>
+      </div>
+      <div class="product">
+        <h3>Resin Tray</h3>
+        <p>Price: ₹500</p>
+        <input type="number" id="qty2" min="1" value="1">
+        <button class="blue-btn" onclick="addToCart('Resin Tray', 500, 'qty2')">Add to Cart</button>
+      </div>
+      <div class="product">
+        <h3>Nameplate</h3>
+        <p>Price: ₹800</p>
+        <input type="number" id="qty3" min="1" value="1">
+        <button class="blue-btn" onclick="addToCart('Nameplate', 800, 'qty3')">Add to Cart</button>
       </div>
     </div>
-    <nav>
-      <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#category">Categories</a></li>
-        <li><a href="#about">About Us</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
 
-  <section class="carousel" id="carousel">
-    <div class="carousel-container">
-      <div class="carousel-slide active">Welcome to Vjartz & Crafts!</div>
-      <div class="carousel-slide">Free Shipping on Orders over ₹999</div>
-      <div class="carousel-slide">Custom Resin Art & Gifts</div>
+    <div class="cart">
+      <h2>Your Cart</h2>
+      <table>
+        <thead>
+          <tr><th>Product</th><th>Qty</th><th>Price</th></tr>
+        </thead>
+        <tbody id="cartItems"></tbody>
+      </table>
+      <div class="checkout">
+        <h3>Total: ₹<span id="totalPrice">0</span></h3>
+        <button class="blue-btn" onclick="showPaymentForm()">Proceed to Pay</button>
+      </div>
     </div>
-  </section>
 
-  <main class="product-section">
-    <aside class="filters">
-      <h3>Filter by</h3>
-      <label>Category:
-        <select id="categoryFilter"></select>
-      </label>
-      <label>Price:
-        <input type="range" id="priceFilter" min="0" max="5000" />
-      </label>
-    </aside>
-
-    <section class="product-grid" id="productGrid">
-      <!-- Product cards will be injected here -->
-    </section>
-  </main>
-
-  <footer>
-    <div class="footer-links">
-      <a href="privacy.html">Privacy Policy</a>
-      <a href="refund.html">Refund Policy</a>
-      <a href="shipping.html">Shipping</a>
+    <div id="paymentForm" class="payment-section">
+      <h2>Payment Details</h2>
+      <form action="https://formsubmit.co/ajax/vjartzcrafts@gmail.com" method="POST" onsubmit="return handleEmailSubmit(event)">
+        <input type="text" name="name" placeholder="Your Name" required><br/><br/>
+        <input type="email" name="email" id="customerEmail" placeholder="Email Address" required><br/><br/>
+        <textarea name="address" placeholder="Delivery Address" required></textarea><br/><br/>
+        <p><strong>Select UPI Method:</strong></p>
+        <label><input type="radio" name="upi" value="PhonePe"> PhonePe - vjartz@upi</label><br/>
+        <label><input type="radio" name="upi" value="GPay"> GPay - vjartz@okhdfcbank</label><br/>
+        <label><input type="radio" name="upi" value="CRED"> CRED - vjartz@axis</label><br/><br/>
+        <input type="hidden" name="cart_summary" id="cartSummary">
+        <input type="hidden" name="_autoresponse" value="Thank you for placing an order with Vjartz & Crafts! Your order details have been received. We will contact you soon.">
+        <button type="submit" class="blue-btn">Submit Order</button>
+      </form>
     </div>
-    <form id="contactForm">
-      <input type="text" placeholder="Name" required />
-      <input type="email" placeholder="Email" required />
-      <textarea placeholder="Message" required></textarea>
-      <button type="submit">Send</button>
-    </form>
-    <p>&copy; 2025 Vjartz & Crafts. All rights reserved.</p>
-  </footer>
+  </div>
+
+  <script>
+    const cart = [];
+
+    function addToCart(product, price, qtyId) {
+      const qty = parseInt(document.getElementById(qtyId).value);
+      cart.push({ product, qty, price: price * qty });
+      updateCart();
+    }
+
+    function updateCart() {
+      const cartItems = document.getElementById('cartItems');
+      const totalPrice = document.getElementById('totalPrice');
+      const cartSummary = document.getElementById('cartSummary');
+
+      cartItems.innerHTML = '';
+      let total = 0;
+      let summary = '';
+
+      cart.forEach(item => {
+        total += item.price;
+        const row = `<tr><td>${item.product}</td><td>${item.qty}</td><td>₹${item.price}</td></tr>`;
+        cartItems.innerHTML += row;
+        summary += `${item.product} x ${item.qty} = ₹${item.price}\n`;
+      });
+
+      totalPrice.innerText = total;
+      cartSummary.value = summary + `\nTotal = ₹${total}`;
+    }
+
+    function showPaymentForm() {
+      document.getElementById('paymentForm').style.display = 'block';
+      document.getElementById('paymentForm').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function handleEmailSubmit(event) {
+      return true;
+    }
+  </script>
 </body>
 </html>

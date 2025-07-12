@@ -1,85 +1,42 @@
-// script.js
+
 const products = [
-  { id: 1, name: 'Resin Keychain', price: 150, category: 'Accessories', image: 'assets/keychain.jpg' },
-  { id: 2, name: 'Decor Tray', price: 450, category: 'Home Decor', image: 'assets/tray.jpg' },
-  { id: 3, name: 'Nameplate', price: 800, category: 'Nameplates', image: 'assets/nameplate.jpg' },
-  { id: 4, name: 'Coaster Set', price: 350, category: 'Tableware', image: 'assets/coasters.jpg' }
+  { name: "Keychains", price: 199 },
+  { name: "Nameplates", price: 899 },
+  { name: "Trays", price: 599 },
+  { name: "Varmala Preservation", price: 1499 },
+  { name: "Birthday Gifts", price: 799 },
+  { name: "Return Gifts", price: 499 },
+  { name: "Custom Resin Art", price: 999 }
 ];
 
+const container = document.getElementById("products");
+
+products.forEach(product => {
+  const div = document.createElement("div");
+  div.className = "product";
+  div.innerHTML = `<h3>${product.name}</h3><p>₹${product.price}</p><button onclick='addToCart("${product.name}", ${product.price})'>Add to Cart</button>`;
+  container.appendChild(div);
+});
+
 let cart = [];
-let wishlist = [];
 
-window.onload = () => {
-  renderProducts(products);
-  initSearch();
-  initCarousel();
-};
-
-function renderProducts(items) {
-  const grid = document.getElementById('productGrid');
-  grid.innerHTML = '';
-  items.forEach(p => {
-    const card = document.createElement('div');
-    card.className = 'product-card';
-    card.innerHTML = `
-      <img src="${p.image}" alt="${p.name}" />
-      <h3>${p.name}</h3>
-      <p>₹${p.price}</p>
-      <button onclick="addToCart(${p.id})">Add to Cart</button>
-      <button onclick="addToWishlist(${p.id})">♡ Wishlist</button>
-    `;
-    grid.appendChild(card);
-  });
+function addToCart(name, price) {
+  cart.push({ name, price });
+  alert(name + " added to cart.");
 }
 
-function addToCart(id) {
-  const product = products.find(p => p.id === id);
-  cart.push(product);
-  document.getElementById('cart-count').textContent = `🛒 ${cart.length}`;
-  alert(`${product.name} added to cart.`);
-  showPaymentOption();
-}
+function submitOrder() {
+  const email = document.getElementById("email").value;
+  const message = document.getElementById("message").value;
+  const file = document.getElementById("fileInput").files[0]?.name || "None";
 
-function addToWishlist(id) {
-  const product = products.find(p => p.id === id);
-  if (!wishlist.find(p => p.id === id)) wishlist.push(product);
-  document.getElementById('wishlist-count').textContent = `♥ ${wishlist.length}`;
-  alert(`${product.name} added to wishlist.`);
-}
+  console.log("Order Summary:", { email, message, file, cart });
 
-function initSearch() {
-  const input = document.getElementById('searchInput');
-  input.addEventListener('input', () => {
-    const query = input.value.toLowerCase();
-    const filtered = products.filter(p => p.name.toLowerCase().includes(query));
-    renderProducts(filtered);
-  });
-}
+  alert("Thank you for your order!\n\nWe will contact you soon.\n\nPlease complete payment manually via UPI after we confirm via email.");
 
-function initCarousel() {
-  const slides = document.querySelectorAll('.carousel-slide');
-  let current = 0;
-  setInterval(() => {
-    slides[current].classList.remove('active');
-    current = (current + 1) % slides.length;
-    slides[current].classList.add('active');
-  }, 3000);
-}
-
-function showPaymentOption() {
-  const totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
-  const orderId = 'VJ' + Math.floor(100000 + Math.random() * 900000);
-  const upiLink = `upi://pay?pa=9550588369@ybl&pn=Vjartz%20Crafts&am=${totalAmount}&cu=INR&tn=Order%20${orderId}`;
-  const payBtn = document.createElement('a');
-  payBtn.href = upiLink;
-  payBtn.target = '_blank';
-  payBtn.className = 'product-card';
-  payBtn.style.background = '#007BFF';
-  payBtn.style.color = 'white';
-  payBtn.style.padding = '10px';
-  payBtn.style.margin = '20px';
-  payBtn.style.textAlign = 'center';
-  payBtn.style.display = 'block';
-  payBtn.innerText = `Pay ₹${totalAmount} via PhonePe`;
-  document.body.appendChild(payBtn);
+  // Reset form
+  cart = [];
+  document.getElementById("email").value = "";
+  document.getElementById("message").value = "";
+  document.getElementById("fileInput").value = null;
 }

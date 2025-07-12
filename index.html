@@ -7,135 +7,133 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f0f9ff;
-      color: #034078;
-      margin: 0;
-      padding: 0;
+      padding: 20px;
     }
     .container {
-      max-width: 900px;
+      max-width: 800px;
       margin: auto;
-      padding: 20px;
     }
     h1, h2 {
       text-align: center;
     }
-    .products {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-    }
-    .product-card {
-      background: #fff;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      width: 250px;
-      text-align: center;
-    }
-    .product-card h3 {
-      margin: 10px 0;
-    }
-    .buy-btn {
-      background-color: #38b6ff;
-      color: white;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .order-form {
-      display: none;
-      background-color: #ffffff;
-      margin-top: 30px;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    }
-    input, textarea {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      border-radius: 5px;
+    .product {
       border: 1px solid #ccc;
+      padding: 15px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    .upi-section {
-      margin-top: 15px;
-      background: #f9f9f9;
-      padding: 10px;
-      border-radius: 8px;
-      font-size: 14px;
+    .blue-btn {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      cursor: pointer;
+      border-radius: 5px;
     }
-    .upi-section strong {
-      color: #0077b6;
+    .blue-btn:hover {
+      background-color: #0056b3;
+    }
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Vjartz & Crafts</h1>
-    <p style="text-align:center;">Follow us on Instagram: <a href="https://instagram.com/vjartz_crafts" target="_blank">@vjartz_crafts</a></p>
+    <p>Follow us on Instagram: <a href="https://instagram.com/vjartz_crafts" target="_blank">@vjartz_crafts</a></p>
 
-    <div class="products" id="products">
-      <div class="product-card">
-        <h3>Resin Keychain</h3>
-        <p>Price: ₹150</p>
-        <button class="buy-btn" onclick="openOrderForm('Resin Keychain', 150)">Buy Now</button>
+    <!-- Product Listing -->
+    <div id="products">
+      <div class="product">
+        <span>Resin Keychain - ₹150</span>
+        <button class="blue-btn" onclick="addToCart('Resin Keychain', 150)">Add to Cart</button>
       </div>
-      <div class="product-card">
-        <h3>Custom Nameplate</h3>
-        <p>Price: ₹700</p>
-        <button class="buy-btn" onclick="openOrderForm('Custom Nameplate', 700)">Buy Now</button>
+      <div class="product">
+        <span>Resin Tray - ₹500</span>
+        <button class="blue-btn" onclick="addToCart('Resin Tray', 500)">Add to Cart</button>
       </div>
-      <!-- Add more products as needed -->
+      <div class="product">
+        <span>Nameplate - ₹800</span>
+        <button class="blue-btn" onclick="addToCart('Nameplate', 800)">Add to Cart</button>
+      </div>
+      <div style="text-align:center; margin-top:20px;">
+        <button class="blue-btn" onclick="showCartPage()">Go to Cart</button>
+      </div>
     </div>
 
-    <!-- Hidden Order Form -->
-    <div class="order-form" id="orderForm">
-      <h2>Place Your Order</h2>
-      <p><strong>Product:</strong> <span id="selectedProductName"></span></p>
-      <p><strong>Price:</strong> ₹<span id="selectedProductPrice"></span></p>
-
-      <input type="email" id="email" placeholder="Your Email" required />
-      <textarea id="message" placeholder="Custom message or notes..."></textarea>
-      <label>Upload Reference Image:</label>
-      <input type="file" id="fileInput" accept="image/*" />
-
-      <div class="upi-section">
-        <p><strong>UPI ID:</strong> <code>vjartz@ybl</code></p>
-        <p>📸 Please make payment via PhonePe, GPay, Paytm, or CRED after confirmation.</p>
-        <p>Share payment screenshot via email or WhatsApp.</p>
+    <!-- Cart Page -->
+    <div id="cartPage" class="hidden">
+      <h2>Your Cart</h2>
+      <ul id="cartItems"></ul>
+      <h3>Total: ₹<span id="cartTotal">0</span></h3>
+      <div style="text-align:center;">
+        <button class="blue-btn" onclick="showPaymentPage()">Buy Now</button>
       </div>
+    </div>
 
-      <button class="buy-btn" onclick="submitOrder()">Submit Order</button>
+    <!-- Payment Page -->
+    <div id="paymentPage" class="hidden">
+      <h2>Customer & Payment Details</h2>
+      <input type="text" id="customerName" placeholder="Your Name" required><br/><br/>
+      <input type="email" id="email" placeholder="Your Email" required><br/><br/>
+      <textarea id="address" placeholder="Your Address" required></textarea><br/><br/>
+      <label>Upload Reference Image:</label><br/>
+      <input type="file" id="fileInput" accept="image/*" /><br/><br/>
+
+      <h3>Choose UPI Payment Method</h3>
+      <ul>
+        <li>PhonePe: vjartz@upi</li>
+        <li>GPay: vjartz@okhdfcbank</li>
+        <li>CRED: vjartz@axis</li>
+      </ul>
+      <p>After payment, you will receive confirmation via email.</p>
+      <button class="blue-btn" onclick="submitOrder()">Submit Order</button>
     </div>
   </div>
 
   <script>
-    function openOrderForm(productName, productPrice) {
-      document.getElementById("selectedProductName").textContent = productName;
-      document.getElementById("selectedProductPrice").textContent = productPrice;
-      document.getElementById("orderForm").style.display = "block";
-      window.scrollTo(0, document.body.scrollHeight);
+    const cart = [];
+
+    function addToCart(product, price) {
+      cart.push({ product, price });
+      alert(`${product} added to cart`);
+    }
+
+    function showCartPage() {
+      document.getElementById('products').classList.add('hidden');
+      document.getElementById('cartPage').classList.remove('hidden');
+
+      const cartItemsEl = document.getElementById('cartItems');
+      const totalEl = document.getElementById('cartTotal');
+      cartItemsEl.innerHTML = '';
+      let total = 0;
+      cart.forEach(item => {
+        const li = document.createElement('li');
+        li.innerText = `${item.product} - ₹${item.price}`;
+        cartItemsEl.appendChild(li);
+        total += item.price;
+      });
+      totalEl.innerText = total;
+    }
+
+    function showPaymentPage() {
+      document.getElementById('cartPage').classList.add('hidden');
+      document.getElementById('paymentPage').classList.remove('hidden');
     }
 
     function submitOrder() {
-      const email = document.getElementById("email").value;
-      const message = document.getElementById("message").value;
-      const file = document.getElementById("fileInput").files[0]?.name || "None";
-      const product = document.getElementById("selectedProductName").textContent;
-      const price = document.getElementById("selectedProductPrice").textContent;
-
-      console.log("Order Summary:", { email, product, price, message, file });
-
-      alert("Thank you for your order!\n\nWe will contact you soon with UPI payment details.");
-
-      // Reset form
-      document.getElementById("email").value = "";
-      document.getElementById("message").value = "";
-      document.getElementById("fileInput").value = null;
-      document.getElementById("orderForm").style.display = "none";
+      const name = document.getElementById('customerName').value;
+      const email = document.getElementById('email').value;
+      const address = document.getElementById('address').value;
+      if (!name || !email || !address) {
+        alert("Please fill all the details.");
+        return;
+      }
+      alert("Thank you! Your order has been submitted. You'll receive an email shortly.");
+      // Optionally, send form data using email or backend API here.
     }
   </script>
 </body>

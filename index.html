@@ -131,7 +131,7 @@
         <label><input type="radio" name="upi" value="GPay"> GPay - vjartz@okhdfcbank</label><br/>
         <label><input type="radio" name="upi" value="CRED"> CRED - vjartz@axis</label><br/><br/>
         <input type="hidden" name="cart_summary" id="cartSummary">
-        <input type="hidden" name="_cc" id="ccField">
+        <input type="hidden" name="_autoresponse" value="Thank you for placing an order with Vjartz & Crafts! Your order details have been received. We will contact you soon.">
         <button type="submit" class="blue-btn">Submit Order</button>
       </form>
     </div>
@@ -172,8 +172,6 @@
     }
 
     function handleEmailSubmit(event) {
-      const customerEmail = document.getElementById('customerEmail').value;
-      document.getElementById('ccField').value = customerEmail;
       return true;
     }
   </script>

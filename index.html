@@ -122,15 +122,16 @@
 
     <div id="paymentForm" class="payment-section">
       <h2>Payment Details</h2>
-      <form action="https://formsubmit.co/vjartzcrafts@gmail.com" method="POST">
+      <form action="https://formsubmit.co/ajax/vjartzcrafts@gmail.com" method="POST" onsubmit="return handleEmailSubmit(event)">
         <input type="text" name="name" placeholder="Your Name" required><br/><br/>
-        <input type="email" name="email" placeholder="Email Address" required><br/><br/>
+        <input type="email" name="email" id="customerEmail" placeholder="Email Address" required><br/><br/>
         <textarea name="address" placeholder="Delivery Address" required></textarea><br/><br/>
         <p><strong>Select UPI Method:</strong></p>
         <label><input type="radio" name="upi" value="PhonePe"> PhonePe - vjartz@upi</label><br/>
         <label><input type="radio" name="upi" value="GPay"> GPay - vjartz@okhdfcbank</label><br/>
         <label><input type="radio" name="upi" value="CRED"> CRED - vjartz@axis</label><br/><br/>
         <input type="hidden" name="cart_summary" id="cartSummary">
+        <input type="hidden" name="_cc" id="ccField">
         <button type="submit" class="blue-btn">Submit Order</button>
       </form>
     </div>
@@ -168,6 +169,12 @@
     function showPaymentForm() {
       document.getElementById('paymentForm').style.display = 'block';
       document.getElementById('paymentForm').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function handleEmailSubmit(event) {
+      const customerEmail = document.getElementById('customerEmail').value;
+      document.getElementById('ccField').value = customerEmail;
+      return true;
     }
   </script>
 </body>

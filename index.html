@@ -1,4 +1,4 @@
-<!-- Updated HTML with editable/deletable cart and UPI app redirection (No Razorpay) -->
+<!-- Final version without Razorpay, using only UPI deep link -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -130,7 +130,7 @@
       <form id="orderForm">
         <input type="text" name="name" id="custName" placeholder="Your Name" required><br/><br/>
         <input type="email" name="email" id="customerEmail" placeholder="Email Address" required><br/><br/>
-        <textarea name="address" placeholder="Delivery Address" required></textarea><br/><br/>
+        <textarea name="address" id="custAddress" placeholder="Delivery Address" required></textarea><br/><br/>
         <input type="hidden" name="cart_summary" id="cartSummary">
         <button type="submit" class="blue-btn">Continue to UPI Payment</button>
       </form>
@@ -205,14 +205,31 @@
       e.preventDefault();
       const name = document.getElementById('custName').value;
       const email = document.getElementById('customerEmail').value;
+      const address = document.getElementById('custAddress').value;
       const orderId = 'VJ' + Math.floor(100000 + Math.random() * 900000);
 
       const upiLink = `upi://pay?pa=9550588369@ybl&pn=Vjartz%20Crafts&am=${total}&cu=INR&tn=Order%20${orderId}`;
       document.getElementById('upiPayLink').href = upiLink;
       document.getElementById('upiPaymentBox').style.display = 'block';
 
-      alert(`Order ID: ${orderId}\nTotal: ₹${total}\nClick 'Pay Now via UPI' to complete payment.`);
+      // EmailJS to send confirmation email to customer
+      const message = `Hello ${name},\n\nThank you for your order (ID: ${orderId}).\n\nOrder Summary:\n${document.getElementById('cartSummary').value}\n\nDelivery Address:\n${address}\n\nPlease complete payment via UPI to 9550588369@ybl`;
+
+      emailjs.send("your_service_id", "your_template_id", {
+        to_email: email,
+        customer_name: name,
+        order_id: orderId,
+        message: message
+      }, "your_user_id");
+
+      setTimeout(() => {
+        window.location.href = `thankyou.html?name=${encodeURIComponent(name)}&orderId=${orderId}&total=${total}`;
+      }, 2000);
     });
+  </script>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script>
+    (function(){ emailjs.init("your_user_id"); })();
   </script>
 </body>
 </html>

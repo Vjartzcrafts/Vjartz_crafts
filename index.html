@@ -1,10 +1,10 @@
+<!-- Updated HTML with editable/deletable cart and UPI payment integration -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Vjartz & Crafts - Online Store</title>
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -132,8 +132,14 @@
         <input type="email" name="email" id="customerEmail" placeholder="Email Address" required><br/><br/>
         <textarea name="address" placeholder="Delivery Address" required></textarea><br/><br/>
         <input type="hidden" name="cart_summary" id="cartSummary">
-        <button type="submit" class="blue-btn">Pay with Razorpay</button>
+        <button type="submit" class="blue-btn">Pay with PhonePe / GPay / CRED</button>
       </form>
+      <br/>
+      <div id="upiPaymentBox" style="margin-top: 20px; display:none;">
+        <h3>Scan to Pay</h3>
+        <p>Or click to pay using your UPI App</p>
+        <a id="upiPayLink" class="blue-btn" target="_blank">Pay Now via UPI</a>
+      </div>
     </div>
   </div>
 
@@ -201,30 +207,11 @@
       const email = document.getElementById('customerEmail').value;
       const orderId = 'VJ' + Math.floor(100000 + Math.random() * 900000);
 
-      const options = {
-        key: 'rzp_test_YourKeyHere', // Replace with your Razorpay key
-        amount: total * 100,
-        currency: 'INR',
-        name: 'Vjartz & Crafts',
-        description: `Order ID: ${orderId}`,
-        prefill: {
-          name: name,
-          email: email
-        },
-        notes: {
-          order_id: orderId,
-          cart: document.getElementById('cartSummary').value
-        },
-        theme: {
-          color: '#007BFF'
-        },
-        handler: function (response) {
-          window.location.href = 'thankyou.html?orderId=' + orderId;
-        }
-      };
+      const upiLink = `upi://pay?pa=9550588369@ybl&pn=Vjartz%20Crafts&am=${total}&cu=INR&tn=Order%20${orderId}`;
+      document.getElementById('upiPayLink').href = upiLink;
+      document.getElementById('upiPaymentBox').style.display = 'block';
 
-      const rzp = new Razorpay(options);
-      rzp.open();
+      alert(`Order ID: ${orderId}\nTotal: ₹${total}\nClick 'Pay Now via UPI' to complete payment.`);
     });
   </script>
 </body>

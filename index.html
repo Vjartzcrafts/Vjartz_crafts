@@ -1,4 +1,4 @@
-<!-- Updated HTML with editable/deletable cart and UPI payment integration -->
+<!-- Updated HTML with editable/deletable cart and UPI app redirection (No Razorpay) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -132,12 +132,12 @@
         <input type="email" name="email" id="customerEmail" placeholder="Email Address" required><br/><br/>
         <textarea name="address" placeholder="Delivery Address" required></textarea><br/><br/>
         <input type="hidden" name="cart_summary" id="cartSummary">
-        <button type="submit" class="blue-btn">Pay with PhonePe / GPay / CRED</button>
+        <button type="submit" class="blue-btn">Continue to UPI Payment</button>
       </form>
       <br/>
       <div id="upiPaymentBox" style="margin-top: 20px; display:none;">
-        <h3>Scan to Pay</h3>
-        <p>Or click to pay using your UPI App</p>
+        <h3>Scan or Tap to Pay</h3>
+        <p>Click below to pay using PhonePe / GPay / CRED</p>
         <a id="upiPayLink" class="blue-btn" target="_blank">Pay Now via UPI</a>
       </div>
     </div>

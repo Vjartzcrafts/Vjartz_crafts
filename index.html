@@ -1,4 +1,4 @@
-<!-- Final version without Razorpay, using only UPI deep link -->
+<!-- Final version with UPI QR Code + Link Payment -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -86,7 +86,7 @@
 </head>
 <body>
   <header>
-    <h1>Vjartz & Crafts - Handmade Online Store</h1>
+    <h1>Vjartz & Crafts - Your Handmade Store</h1>
   </header>
   <div class="container">
     <h2>Products</h2>
@@ -136,8 +136,8 @@
       </form>
       <br/>
       <div id="upiPaymentBox" style="margin-top: 20px; display:none;">
-        <h3>Scan or Tap to Pay</h3>
-        <p>Click below to pay using PhonePe / GPay / CRED</p>
+        <h3>Scan QR or Tap UPI Link</h3>
+        <img id="upiQR" src="" alt="UPI QR Code" style="width:300px;height:300px;"/><br/><br/>
         <a id="upiPayLink" class="blue-btn" target="_blank">Pay Now via UPI</a>
       </div>
     </div>
@@ -208,11 +208,13 @@
       const address = document.getElementById('custAddress').value;
       const orderId = 'VJ' + Math.floor(100000 + Math.random() * 900000);
 
-      const upiLink = `upi://pay?pa=9550588369@ybl&pn=Vjartz%20Crafts&am=${total}&cu=INR&tn=Order%20${orderId}`;
-      document.getElementById('upiPayLink').href = upiLink;
+      const upiString = `upi://pay?pa=9550588369@ybl&pn=Vjartz%20Crafts&am=${total}&cu=INR&tn=Order%20${orderId}`;
+      const qrApi = `https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=${encodeURIComponent(upiString)}`;
+
+      document.getElementById('upiQR').src = qrApi;
+      document.getElementById('upiPayLink').href = upiString;
       document.getElementById('upiPaymentBox').style.display = 'block';
 
-      // EmailJS to send confirmation email to customer
       const message = `Hello ${name},\n\nThank you for your order (ID: ${orderId}).\n\nOrder Summary:\n${document.getElementById('cartSummary').value}\n\nDelivery Address:\n${address}\n\nPlease complete payment via UPI to 9550588369@ybl`;
 
       emailjs.send("your_service_id", "your_template_id", {

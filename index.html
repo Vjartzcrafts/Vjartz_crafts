@@ -13,13 +13,33 @@
 
     <div class="products" id="products"></div>
 
+    <div id="orderPage" style="display: none;">
+  <div class="order-form">
+    <h2>Place Your Order</h2>
+    <input type="email" id="email" placeholder="Your Email" required />
+    <textarea id="message" placeholder="Custom message or notes..."></textarea>
+    <label>Upload Reference Image:</label>
+    <input type="file" id="fileInput" accept="image/*" />
+    <button onclick="submitOrder()">Submit Order</button>
+
+    <div style="margin-top: 15px; padding: 15px; background: #f0f9ff; border-radius: 10px;">
+      <h3>UPI Payment Instructions 💳</h3>
+      <p><strong>UPI ID:</strong> <code>vjartz@ybl</code></p>
+      <p>Please wait for our confirmation email before making payment.</p>
+      <p>Pay via <strong>PhonePe, GPay, Paytm, or CRED</strong>.</p>
+      <p>📸 Upload screenshot to email or WhatsApp after payment.</p>
+    </div>
+  </div>
+</div>
+
+
     <div class="order-form">
       <h2>Place Your Order</h2>
       <input type="email" id="email" placeholder="Your Email" required />
       <textarea id="message" placeholder="Custom message or notes..."></textarea>
       <label>Upload Reference Image:</label>
       <input type="file" id="fileInput" accept="image/*" />
-      <button onclick="submitOrder()">Buy Now via UPI</button>
+      <button onclick="openOrderPage()">Buy Now via UPI</button>
 
       <div style="margin-top: 15px; padding: 15px; background: #f0f9ff; border-radius: 10px;">
         <h3>UPI Payment Instructions 💳</h3>
@@ -31,6 +51,12 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+  function openOrderPage() {
+    document.getElementById("orderPage").style.display = "block";
+    window.scrollTo(0, document.body.scrollHeight); // scrolls to the form
+  }
+</script>
+
 </body>
 </html>

@@ -3,137 +3,165 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Vjartz & Crafts</title>
+  <title>Vjartz & Crafts - Online Store</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 20px;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
     }
-    .container {
-      max-width: 800px;
-      margin: auto;
-    }
-    h1, h2 {
+    header {
+      background-color: #007BFF;
+      color: white;
+      padding: 15px 20px;
       text-align: center;
     }
-    .product {
-      border: 1px solid #ccc;
-      padding: 15px;
-      margin-bottom: 10px;
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px;
+    }
+    .products {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .product {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 15px;
+      width: 30%;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .product h3 {
+      margin: 0;
+    }
+    .product input {
+      width: 50px;
+      margin-right: 10px;
     }
     .blue-btn {
       background-color: #007BFF;
       color: white;
       border: none;
-      padding: 8px 15px;
-      cursor: pointer;
+      padding: 10px;
       border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
     }
     .blue-btn:hover {
       background-color: #0056b3;
     }
-    .hidden {
-      display: none;
+    .cart {
+      margin-top: 30px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+    .checkout {
+      margin-top: 20px;
+      text-align: right;
+    }
+    .payment-section {
+      margin-top: 30px;
+      background: white;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
   </style>
 </head>
 <body>
+  <header>
+    <h1>Vjartz & Crafts - Your Handmade Store</h1>
+  </header>
   <div class="container">
-    <h1>Vjartz & Crafts</h1>
-    <p>Follow us on Instagram: <a href="https://instagram.com/vjartz_crafts" target="_blank">@vjartz_crafts</a></p>
-
-    <!-- Product Listing -->
-    <div id="products">
+    <h2>Products</h2>
+    <div class="products">
       <div class="product">
-        <span>Resin Keychain - ₹150</span>
-        <button class="blue-btn" onclick="addToCart('Resin Keychain', 150)">Add to Cart</button>
+        <h3>Keychain</h3>
+        <p>Price: ₹150</p>
+        <input type="number" id="qty1" min="1" value="1">
+        <button class="blue-btn" onclick="addToCart('Keychain', 150, 'qty1')">Add to Cart</button>
       </div>
       <div class="product">
-        <span>Resin Tray - ₹500</span>
-        <button class="blue-btn" onclick="addToCart('Resin Tray', 500)">Add to Cart</button>
+        <h3>Resin Tray</h3>
+        <p>Price: ₹500</p>
+        <input type="number" id="qty2" min="1" value="1">
+        <button class="blue-btn" onclick="addToCart('Resin Tray', 500, 'qty2')">Add to Cart</button>
       </div>
       <div class="product">
-        <span>Nameplate - ₹800</span>
-        <button class="blue-btn" onclick="addToCart('Nameplate', 800)">Add to Cart</button>
-      </div>
-      <div style="text-align:center; margin-top:20px;">
-        <button class="blue-btn" onclick="showCartPage()">Go to Cart</button>
+        <h3>Nameplate</h3>
+        <p>Price: ₹800</p>
+        <input type="number" id="qty3" min="1" value="1">
+        <button class="blue-btn" onclick="addToCart('Nameplate', 800, 'qty3')">Add to Cart</button>
       </div>
     </div>
 
-    <!-- Cart Page -->
-    <div id="cartPage" class="hidden">
+    <div class="cart">
       <h2>Your Cart</h2>
-      <ul id="cartItems"></ul>
-      <h3>Total: ₹<span id="cartTotal">0</span></h3>
-      <div style="text-align:center;">
-        <button class="blue-btn" onclick="showPaymentPage()">Buy Now</button>
+      <table>
+        <thead>
+          <tr><th>Product</th><th>Qty</th><th>Price</th></tr>
+        </thead>
+        <tbody id="cartItems"></tbody>
+      </table>
+      <div class="checkout">
+        <h3>Total: ₹<span id="totalPrice">0</span></h3>
+        <button class="blue-btn" onclick="document.getElementById('paymentForm').scrollIntoView()">Proceed to Pay</button>
       </div>
     </div>
 
-    <!-- Payment Page -->
-    <div id="paymentPage" class="hidden">
-      <h2>Customer & Payment Details</h2>
-      <input type="text" id="customerName" placeholder="Your Name" required><br/><br/>
-      <input type="email" id="email" placeholder="Your Email" required><br/><br/>
-      <textarea id="address" placeholder="Your Address" required></textarea><br/><br/>
-      <label>Upload Reference Image:</label><br/>
-      <input type="file" id="fileInput" accept="image/*" /><br/><br/>
-
-      <h3>Choose UPI Payment Method</h3>
-      <ul>
-        <li>PhonePe: vjartz@upi</li>
-        <li>GPay: vjartz@okhdfcbank</li>
-        <li>CRED: vjartz@axis</li>
-      </ul>
-      <p>After payment, you will receive confirmation via email.</p>
-      <button class="blue-btn" onclick="submitOrder()">Submit Order</button>
+    <div id="paymentForm" class="payment-section">
+      <h2>Payment Details</h2>
+      <form action="https://formsubmit.co/vjartzcrafts@gmail.com" method="POST">
+        <input type="text" name="name" placeholder="Your Name" required><br/><br/>
+        <input type="email" name="email" placeholder="Email Address" required><br/><br/>
+        <textarea name="address" placeholder="Delivery Address" required></textarea><br/><br/>
+        <p><strong>Select UPI Method:</strong></p>
+        <label><input type="radio" name="upi" value="PhonePe"> PhonePe - vjartz@upi</label><br/>
+        <label><input type="radio" name="upi" value="GPay"> GPay - vjartz@okhdfcbank</label><br/>
+        <label><input type="radio" name="upi" value="CRED"> CRED - vjartz@axis</label><br/><br/>
+        <input type="hidden" name="cart_summary" id="cartSummary">
+        <button type="submit" class="blue-btn">Submit Order</button>
+      </form>
     </div>
   </div>
 
   <script>
     const cart = [];
 
-    function addToCart(product, price) {
-      cart.push({ product, price });
-      alert(`${product} added to cart`);
+    function addToCart(product, price, qtyId) {
+      const qty = parseInt(document.getElementById(qtyId).value);
+      cart.push({ product, qty, price: price * qty });
+      updateCart();
     }
 
-    function showCartPage() {
-      document.getElementById('products').classList.add('hidden');
-      document.getElementById('cartPage').classList.remove('hidden');
+    function updateCart() {
+      const cartItems = document.getElementById('cartItems');
+      const totalPrice = document.getElementById('totalPrice');
+      const cartSummary = document.getElementById('cartSummary');
 
-      const cartItemsEl = document.getElementById('cartItems');
-      const totalEl = document.getElementById('cartTotal');
-      cartItemsEl.innerHTML = '';
+      cartItems.innerHTML = '';
       let total = 0;
+      let summary = '';
+
       cart.forEach(item => {
-        const li = document.createElement('li');
-        li.innerText = `${item.product} - ₹${item.price}`;
-        cartItemsEl.appendChild(li);
         total += item.price;
+        const row = `<tr><td>${item.product}</td><td>${item.qty}</td><td>₹${item.price}</td></tr>`;
+        cartItems.innerHTML += row;
+        summary += `${item.product} x ${item.qty} = ₹${item.price}\n`;
       });
-      totalEl.innerText = total;
-    }
 
-    function showPaymentPage() {
-      document.getElementById('cartPage').classList.add('hidden');
-      document.getElementById('paymentPage').classList.remove('hidden');
-    }
-
-    function submitOrder() {
-      const name = document.getElementById('customerName').value;
-      const email = document.getElementById('email').value;
-      const address = document.getElementById('address').value;
-      if (!name || !email || !address) {
-        alert("Please fill all the details.");
-        return;
-      }
-      alert("Thank you! Your order has been submitted. You'll receive an email shortly.");
-      // Optionally, send form data using email or backend API here.
+      totalPrice.innerText = total;
+      cartSummary.value = summary + `\nTotal = ₹${total}`;
     }
   </script>
 </body>

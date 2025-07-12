@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Vjartz & Crafts - Online Store</title>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -122,27 +123,24 @@
 
     <div id="paymentForm" class="payment-section">
       <h2>Payment Details</h2>
-      <form action="https://formsubmit.co/ajax/vjartzcrafts@gmail.com" method="POST" onsubmit="return handleEmailSubmit(event)">
-        <input type="text" name="name" placeholder="Your Name" required><br/><br/>
+      <form id="orderForm">
+        <input type="text" name="name" id="custName" placeholder="Your Name" required><br/><br/>
         <input type="email" name="email" id="customerEmail" placeholder="Email Address" required><br/><br/>
         <textarea name="address" placeholder="Delivery Address" required></textarea><br/><br/>
-        <p><strong>Select UPI Method:</strong></p>
-        <label><input type="radio" name="upi" value="PhonePe"> PhonePe - vjartz@upi</label><br/>
-        <label><input type="radio" name="upi" value="GPay"> GPay - vjartz@okhdfcbank</label><br/>
-        <label><input type="radio" name="upi" value="CRED"> CRED - vjartz@axis</label><br/><br/>
         <input type="hidden" name="cart_summary" id="cartSummary">
-        <input type="hidden" name="_autoresponse" value="Thank you for placing an order with Vjartz & Crafts! Your order details have been received. We will contact you soon.">
-        <button type="submit" class="blue-btn">Submit Order</button>
+        <button type="submit" class="blue-btn">Pay with Razorpay</button>
       </form>
     </div>
   </div>
 
   <script>
     const cart = [];
+    let total = 0;
 
     function addToCart(product, price, qtyId) {
       const qty = parseInt(document.getElementById(qtyId).value);
-      cart.push({ product, qty, price: price * qty });
+      const itemTotal = price * qty;
+      cart.push({ product, qty, price: itemTotal });
       updateCart();
     }
 
@@ -152,10 +150,10 @@
       const cartSummary = document.getElementById('cartSummary');
 
       cartItems.innerHTML = '';
-      let total = 0;
+      total = 0;
       let summary = '';
 
-      cart.forEach(item => {
+      cart.forEach((item, index) => {
         total += item.price;
         const row = `<tr><td>${item.product}</td><td>${item.qty}</td><td>₹${item.price}</td></tr>`;
         cartItems.innerHTML += row;
@@ -171,9 +169,37 @@
       document.getElementById('paymentForm').scrollIntoView({ behavior: 'smooth' });
     }
 
-    function handleEmailSubmit(event) {
-      return true;
-    }
+    document.getElementById('orderForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('custName').value;
+      const email = document.getElementById('customerEmail').value;
+      const orderId = 'VJ' + Math.floor(100000 + Math.random() * 900000);
+
+      const options = {
+        key: 'rzp_test_YourKeyHere', // Replace with your Razorpay key
+        amount: total * 100, // in paise
+        currency: 'INR',
+        name: 'Vjartz & Crafts',
+        description: `Order ID: ${orderId}`,
+        prefill: {
+          name: name,
+          email: email
+        },
+        notes: {
+          order_id: orderId,
+          cart: document.getElementById('cartSummary').value
+        },
+        theme: {
+          color: '#007BFF'
+        },
+        handler: function (response) {
+          window.location.href = 'thankyou.html?orderId=' + orderId;
+        }
+      };
+
+      const rzp = new Razorpay(options);
+      rzp.open();
+    });
   </script>
 </body>
 </html>
